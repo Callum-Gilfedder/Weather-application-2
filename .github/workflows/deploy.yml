@@ -11,14 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
-
-
-      - name: Checkout Repository
-        uses: actions/checkout@v2
       
-      - name: Set working directory
-        run: cd /home/runner/work/Weather-Application
 
       - name: Set Up Node.js
         uses: actions/setup-node@v2
@@ -27,11 +20,6 @@ jobs:
 
   
 
-
-
-      - name: Navigate to App Directory
-        run: cd weather-app && ls -la
-
         # Think this automatically detects dependencies from the package.json file
       - name: Install Dependencies
         run: npm install
@@ -39,7 +27,7 @@ jobs:
       - name: Build React App
         run: npm run build
 
-            
+  
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4 
         with:
