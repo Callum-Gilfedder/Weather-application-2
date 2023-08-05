@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,17 +19,15 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        working-directory: weather-app
         run: npm install
 
       - name: Build
-        working-directory: weather-app
         run: npm run build
 
       - name: Deploy to GitHub Pages
         run: |
           mkdir gh-pages
-          cp -R weather-app/dist/* gh-pages/
+          cp -R public/* gh-pages/
           cd gh-pages
           git init
           git config user.name "GitHub Actions"
