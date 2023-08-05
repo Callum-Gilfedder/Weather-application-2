@@ -27,7 +27,7 @@ jobs:
       - name: Deploy to GitHub Pages
         run: |
           mkdir gh-pages
-          cp -R public/* gh-pages/
+          cp -R build/* gh-pages/
           cd gh-pages
           git init
           git config user.name "GitHub Actions"
@@ -35,5 +35,3 @@ jobs:
           git add .
           git commit -m "Deploy via GitHub Actions"
           git push --force "https://${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git" master:gh-pages
-
-# The issue was a combination of the wrong nodeJs version being installed and also executing in the wrong directory I think.
