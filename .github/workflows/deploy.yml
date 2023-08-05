@@ -4,10 +4,9 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -26,14 +25,10 @@ jobs:
         working-directory: weather-app
         run: npm run build
 
-      - name: Prepare for Deployment
+      - name: Deploy to GitHub Pages
         run: |
           mkdir gh-pages
           cp -R weather-app/dist/* gh-pages/
-        working-directory: ${{ github.workspace }}
-
-      - name: Deploy to GitHub Pages
-        run: |
           cd gh-pages
           git init
           git config user.name "GitHub Actions"
@@ -41,6 +36,3 @@ jobs:
           git add .
           git commit -m "Deploy via GitHub Actions"
           git push --force "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" master:gh-pages
-        working-directory: ${{ github.workspace }}
-
-        # Having constant errors with not being able to find correct directories,
