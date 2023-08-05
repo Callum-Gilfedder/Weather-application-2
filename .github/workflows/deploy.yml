@@ -1,35 +1,39 @@
-name: Build and Deploy React App
+name: GitHub Pages Deployment
 
 on:
-  
   push:
     branches:
-      - main  
+      - main
+  workflow_dispatch:
 
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Set Up Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 14  
+          node-version: '14'
 
-  
-
-        # Think this automatically detects dependencies from the package.json file
-      - name: Install Dependencies
+      - name: Install dependencies
+        working-directory: weather-app
         run: npm install
 
-      - name: Build React App
+      - name: Build
+        working-directory: weather-app
         run: npm run build
 
-  
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4 
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+        run: |
+          mkdir gh-pages
+          cp -R weather-app/dist/* gh-pages/
+          cd gh-pages
+          git init
+          git config user.name "GitHub Actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add .
+          git commit -m "Deploy via GitHub Actions"
+          git push --force "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" master:gh-pages
